@@ -102,9 +102,15 @@ class CompletionHandler:
         if element == "self":
             for fn in self.ast.get_internal_functions():
                 completions.append(CompletionItem(label=fn))
-            # TODO: This should exclude constants and immutables
-            for var in self.ast.get_state_variables():
-                completions.append(CompletionItem(label=var))
+
+            for var in self.ast.get_state_variables_as_vardecls():
+
+                # In Vyper, immutable and/or constant variables can not be accessed via
+                # self. so we should exclude them here
+                if var.is_constant or var.is_immutable:
+                    continue
+
+                completions.append(CompletionItem(label=var.target.id))
         elif self.ast.imports and element in self.ast.imports.keys():
             completions = self._dot_completions_for_module(
                 element, top_level_node=top_level_node, line=line

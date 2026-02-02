@@ -217,14 +217,15 @@ class AST:
         return [node.target.id for node in struct_node.get_children(nodes.AnnAssign)]
 
     def get_state_variables(self):
+        return [node.target.id for node in self.get_state_variables_as_vardecls()]
+
+    def get_state_variables_as_vardecls(self):
         # NOTE: The state variables should be fetched from self.ast_data, they are
         # missing from self.ast_data_unfolded and self.ast_data_folded when constants
         if self.ast_data is None:
             return []
 
-        return [
-            node.target.id for node in self.ast_data.get_descendants(nodes.VariableDecl)
-        ]
+        return self.ast_data.get_descendants(nodes.VariableDecl)
 
     def get_internal_function_nodes(self):
         function_nodes = self.get_descendants(nodes.FunctionDef)
