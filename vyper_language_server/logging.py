@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger("vyper-lsp")
+logger = logging.getLogger("vyper-language-server")
 logger.setLevel(logging.INFO)
 
 logging.basicConfig(

@@ -8,14 +8,14 @@ from lsprotocol.types import (
 )
 from pygls.server import LanguageServer
 from pygls.workspace import Document
-from vyper_lsp.utils import (
+from vyper_language_server.utils import (
     format_fn,
 )
-from vyper_lsp.ast import AST
+from vyper_language_server.ast import AST
 
 # Available base types
-UNSIGNED_INTEGER_TYPES = {f"uint{8*(i)}" for i in range(32, 0, -1)}
-SIGNED_INTEGER_TYPES = {f"int{8*(i)}" for i in range(32, 0, -1)}
+UNSIGNED_INTEGER_TYPES = {f"uint{8 * (i)}" for i in range(32, 0, -1)}
+SIGNED_INTEGER_TYPES = {f"int{8 * (i)}" for i in range(32, 0, -1)}
 INTEGER_TYPES = UNSIGNED_INTEGER_TYPES | SIGNED_INTEGER_TYPES
 
 BYTES_M_TYPES = {f"bytes{i}" for i in range(32, 0, -1)}
@@ -43,7 +43,7 @@ class CompletionHandler:
         module = self.ast.imports.get(element)
         if not module:
             return completions
-            
+
         # Handle functions
         if hasattr(module, "functions"):
             for name, fn in module.functions.items():
@@ -82,15 +82,12 @@ class CompletionHandler:
                             label_details=completion_item_label_details,
                         )
                     )
-                    
+
         # Handle module variables
         if hasattr(module, "variables"):
             for name, var in module.variables.items():
                 completions.append(
-                    CompletionItem(
-                        label=name,
-                        documentation=f"Variable: {name}"
-                    )
+                    CompletionItem(label=name, documentation=f"Variable: {name}")
                 )
 
         return completions
@@ -104,7 +101,6 @@ class CompletionHandler:
                 completions.append(CompletionItem(label=fn))
 
             for var in self.ast.get_state_variables_as_vardecls():
-
                 # In Vyper, immutable and/or constant variables can not be accessed via
                 # self. so we should exclude them here
                 if var.is_constant or var.is_immutable:

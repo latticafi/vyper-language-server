@@ -1,5 +1,5 @@
 from lsprotocol.types import Position
-from vyper_lsp.ast import AST
+from vyper_language_server.ast import AST
 
 
 def test_get_constants(ast):

@@ -7,8 +7,8 @@ from lsprotocol.types import (
 )
 from pygls.workspace import Document
 from vyper.ast import nodes
-from vyper_lsp.ast import AST
-from vyper_lsp.utils import (
+from vyper_language_server.ast import AST
+from vyper_language_server.utils import (
     get_expression_at_cursor,
     get_word_at_cursor,
 )
@@ -18,7 +18,7 @@ deprecation_pattern = re.compile(pattern_text)
 
 min_vyper_version = Version("0.4.0")
 
-logger = logging.getLogger("vyper-lsp")
+logger = logging.getLogger("vyper-language-server")
 
 
 class HoverHandler:
@@ -60,10 +60,12 @@ class HoverHandler:
                 if module_name in self.ast.imports:
                     module = self.ast.imports[module_name]
                     if hasattr(module, "functions") and member_name in module.functions:
-                        fn = module.functions[member_name]
+                        module.functions[member_name]
                         return f"(Module Function) **{module_name}.{member_name}**"
-                    elif hasattr(module, "variables") and member_name in module.variables:
-                        var = module.variables[member_name]
+                    elif (
+                        hasattr(module, "variables") and member_name in module.variables
+                    ):
+                        module.variables[member_name]
                         return f"(Module Variable) **{module_name}.{member_name}**"
 
         if self._is_internal_fn(full_word):

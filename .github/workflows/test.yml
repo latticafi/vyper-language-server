@@ -1,26 +1,30 @@
 name: Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   pytest:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Install uv
-      uses: astral-sh/setup-uv@v4
-    - name: Set up Python
-      run: uv python install
-    - name: Install dependencies
-      run: uv sync --all-extras --dev
-    - name: Run pytest with coverage
-      run: uv run coverage run -m pytest
-    - name: Report coverage
-      run: |
-        uv run coverage html
-        uv run coverage report --fail-under=75
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: ./htmlcov
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+      - name: Set up Python
+        run: uv python install
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+      - name: Run pytest with coverage
+        run: uv run coverage run -m pytest
+      - name: Report coverage
+        run: |
+          uv run coverage html
+          uv run coverage report --fail-under=75
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: ./htmlcov

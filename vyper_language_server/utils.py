@@ -11,7 +11,7 @@ from vyper.ast import VyperNode
 from vyper.exceptions import VyperException
 from vyper.compiler import FileInput
 
-logger = logging.getLogger("vyper-lsp")
+logger = logging.getLogger("vyper-language-server")
 
 
 def get_installed_vyper_version():

@@ -1,3 +1,3 @@
-from vyper_lsp import main
+from vyper_language_server import main
 
 main.main()

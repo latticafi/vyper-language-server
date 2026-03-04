@@ -1,73 +1,88 @@
-# Vyper LSP Server
+# Vyper Language Server
+
+A language server for [Vyper](https://github.com/vyperlang/vyper), a pythonic smart contract language for the EVM.
+
+Forked from [vyperlang/vyper-lsp](https://github.com/vyperlang/vyper-lsp).
 
 ## Requirements
 
-Vyper LSP requires a minimum vyper version of 0.4.1. For full support, it is also required that the Vyper version installed in your virtual environment is capable of compiling your contract.
+- Python >= 3.12
+- Vyper >= 0.4.1
 
-## Development
+The Vyper version installed in your virtual environment must be capable of compiling your contract for full support.
 
-### Setting up Development Environment
+## Installation
 
-1. **Install uv** (Fast Python package installer and resolver)
+This language server imports Vyper as a library, so it should be installed in the same environment as your project's Vyper.
 
-   ```bash
-   # Install with pip
-   pip install uv
+### As a project dev dependency (recommended)
 
-   # Or on macOS with Homebrew
-   brew install uv
-   ```
+```toml
+# pyproject.toml
+[dependency-groups]
+dev = [
+    "vyper-language-server",
+]
 
-2. **Clone the repository**
+[tool.uv.sources]
+vyper-language-server = { git = "https://github.com/latticafi/vyper-language-server" }
+```
 
-   ```bash
-   git clone https://github.com/vyperlang/vyper-lsp.git
-   cd vyper-lsp
-   ```
+Then `uv sync`.
 
-3. **Install dependencies**
+### Via pipx (global)
 
-   ```bash
-   uv pip install -e .
-   ```
+```bash
+pipx install git+https://github.com/latticafi/vyper-language-server.git
+```
 
-4. **Run tests**
+Note: when installed globally, the server will use whatever Vyper version is in its own environment, which may not match your project.
 
-   ```bash
-   uv run pytest
-   ```
+### Verify
 
-### Code Quality and Testing
-
-- Run linting: `ruff check .`
-- Format code: `ruff format .`
-- Generate test coverage: `coverage run -m pytest && coverage report`
-
-## Install Vyper-LSP
-
-### via `pipx`
-I like `pipx` because it handles creating an isolated env for executables and putting them on your path.
-
-`pipx install git+https://github.com/vyperlang/vyper-lsp.git`
-
-### via `pip`
-You can install using `pip` if you manage your environments through some other means:
-
-`pip install git+https://github.com/vyperlang/vyper-lsp.git`
-
-## Verify installation
-
-Check that `vyper-lsp` is on your path:
-
-In your terminal, run `which vyper-lsp`. If installation was succesful, you should see the path to your installed executable.
+```bash
+which vyper-language-server
+```
 
 ## Editor Setup
 
+### Neovim
+
+Add to `~/.config/nvim/init.lua`:
+
+```lua
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  pattern = { "*.vy" },
+  callback = function()
+    vim.lsp.start({
+      name = "vyper-language-server",
+      cmd = { "vyper-language-server" },
+      root_dir = vim.fs.dirname(vim.fs.find({ ".git" }, { upward = true })[1])
+    })
+  end,
+})
+```
+
+If installed as a project dep, point to the venv binary:
+
+```lua
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  pattern = { "*.vy" },
+  callback = function()
+    local venv = vim.fs.find({ ".venv" }, { upward = true })[1]
+    local cmd = venv and (venv .. "/bin/vyper-language-server") or "vyper-language-server"
+    vim.lsp.start({
+      name = "vyper-language-server",
+      cmd = { cmd },
+      root_dir = vim.fs.dirname(vim.fs.find({ ".git" }, { upward = true })[1])
+    })
+  end,
+})
+```
+
 ### Emacs
 
-The following emacs lisp snippet will create a Vyper mode derived from Python Mode, and sets up vyper-lsp.
-
-``` emacs-lisp
+```emacs-lisp
 (define-derived-mode vyper-mode python-mode "Vyper" "Major mode for editing Vyper.")
 
 (add-to-list 'auto-mode-alist '("\\.vy\\'" . vyper-mode))
@@ -77,52 +92,50 @@ The following emacs lisp snippet will create a Vyper mode derived from Python Mo
                '(vyper-mode . "vyper"))
   (lsp-register-client
    (make-lsp-client :new-connection
-                    (lsp-stdio-connection `(,(executable-find "vyper-lsp")))
+                    (lsp-stdio-connection `(,(executable-find "vyper-language-server")))
                     :activation-fn (lsp-activate-on "vyper")
-                    :server-id 'vyper-lsp)))
+                    :server-id 'vyper-language-server)))
 ```
 
-### Neovim
+## Features
 
-Add the following to your `neovim` lua config.
+- Diagnostics (compile errors and warnings)
+- Completions (state variables, functions, decorators, types, imports)
+- Hover information
+- Go to definition / declaration
+- Find references
+- Signature help
 
-It should be at `~/.config/nvim/init.lua`
+## Development
 
-``` lua
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  pattern = { "*.vy" },
-  callback = function()
-    vim.lsp.start({
-      name = "vyper-lsp",
-      cmd = { "vyper-lsp" },
-      root_dir = vim.fs.dirname(vim.fs.find({ ".git" }, { upward = true })[1])
-    })
-  end,
-})
+### Setup
 
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  pattern = { "*.vy" },
-  callback = function()
-    vim.lsp.start({
-      name = "vyper-lsp",
-      cmd = { "vyper-lsp" },
-      root_dir = vim.fs.dirname(vim.fs.find({ ".git" }, { upward = true })[1])
-    })
-  end,
-})
+1. **Install uv** (Fast Python package installer and resolver)
 
-vim.api.nvim_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '[d', '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', ']d', '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>', { noremap = true, silent = true })
-
+```bash
+   pip install uv
+   # Or on macOS with Homebrew
+   brew install uv
 ```
 
+2. **Clone and install**
 
-### VS Code
+```bash
+   git clone https://github.com/latticafi/vyper-language-server.git
+   cd vyper-language-server
+   uv sync
+```
 
-See `vyper-lsp` VS Code extension
+### Commands
+
+```bash
+uv run pytest                  # run tests
+uv run ruff check .            # lint
+uv run ruff format .           # format
+uv run coverage run -m pytest  # test with coverage
+uv run coverage report         # view coverage
+```
+
+## License
+
+MIT

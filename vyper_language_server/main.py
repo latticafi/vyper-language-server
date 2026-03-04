@@ -30,13 +30,13 @@ from lsprotocol.types import (
 )
 from packaging.version import Version
 from pygls.server import LanguageServer
-from vyper_lsp.handlers.signatures import SignatureHandler
-from vyper_lsp.handlers.completion import CompletionHandler
-from vyper_lsp.handlers.hover import HoverHandler
-from vyper_lsp.debounce import Debouncer
+from vyper_language_server.handlers.signatures import SignatureHandler
+from vyper_language_server.handlers.completion import CompletionHandler
+from vyper_language_server.handlers.hover import HoverHandler
+from vyper_language_server.debounce import Debouncer
 
-from vyper_lsp.navigation import ASTNavigator
-from vyper_lsp.utils import get_installed_vyper_version
+from vyper_language_server.navigation import ASTNavigator
+from vyper_language_server.utils import get_installed_vyper_version
 
 
 from .ast import AST
@@ -52,7 +52,7 @@ hover_handler = HoverHandler(ast)
 
 debouncer = Debouncer(wait=0.5)
 
-logger = logging.getLogger("vyper-lsp")
+logger = logging.getLogger("vyper-language-server")
 
 
 def _check_minimum_vyper_version():
@@ -67,9 +67,11 @@ def _check_minimum_vyper_version():
 @debouncer.debounce
 def validate_doc(
     ls: LanguageServer,
-    params: DidOpenTextDocumentParams
-    | DidChangeTextDocumentParams
-    | DidSaveTextDocumentParams,
+    params: (
+        DidOpenTextDocumentParams
+        | DidChangeTextDocumentParams
+        | DidSaveTextDocumentParams
+    ),
 ):
     logger.info("validating doc")
     text_doc = ls.workspace.get_text_document(params.text_document.uri)
@@ -158,7 +160,7 @@ def implementation(ls: LanguageServer, params: DefinitionParams):
     document = ls.workspace.get_text_document(params.text_document.uri)
     range_ = navigator.find_implementation(document, params.position)
     if range_:
-        return Location(uri=params.text_document.uri, range=range)
+        return Location(uri=params.text_document.uri, range=range_)
 
 
 def main():
