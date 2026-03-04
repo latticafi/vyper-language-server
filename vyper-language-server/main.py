@@ -67,9 +67,11 @@ def _check_minimum_vyper_version():
 @debouncer.debounce
 def validate_doc(
     ls: LanguageServer,
-    params: DidOpenTextDocumentParams
-    | DidChangeTextDocumentParams
-    | DidSaveTextDocumentParams,
+    params: (
+        DidOpenTextDocumentParams
+        | DidChangeTextDocumentParams
+        | DidSaveTextDocumentParams
+    ),
 ):
     logger.info("validating doc")
     text_doc = ls.workspace.get_text_document(params.text_document.uri)
@@ -158,7 +160,7 @@ def implementation(ls: LanguageServer, params: DefinitionParams):
     document = ls.workspace.get_text_document(params.text_document.uri)
     range_ = navigator.find_implementation(document, params.position)
     if range_:
-        return Location(uri=params.text_document.uri, range=range)
+        return Location(uri=params.text_document.uri, range=range_)
 
 
 def main():
