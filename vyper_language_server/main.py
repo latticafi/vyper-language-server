@@ -1,4 +1,5 @@
 import argparse
+from importlib.metadata import version
 from typing import Optional, List
 import logging
 from .logging import LanguageServerLogHandler
@@ -43,7 +44,7 @@ from .ast import AST
 
 ast = AST()
 
-server = LanguageServer("vyper", "v0.0.1")
+server = LanguageServer("vyper-language-server", version("vyper-language-server"))
 navigator = ASTNavigator(ast)
 
 completer = CompletionHandler(ast)
