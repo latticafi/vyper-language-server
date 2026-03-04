@@ -60,10 +60,12 @@ class HoverHandler:
                 if module_name in self.ast.imports:
                     module = self.ast.imports[module_name]
                     if hasattr(module, "functions") and member_name in module.functions:
-                        fn = module.functions[member_name]
+                        module.functions[member_name]
                         return f"(Module Function) **{module_name}.{member_name}**"
-                    elif hasattr(module, "variables") and member_name in module.variables:
-                        var = module.variables[member_name]
+                    elif (
+                        hasattr(module, "variables") and member_name in module.variables
+                    ):
+                        module.variables[member_name]
                         return f"(Module Variable) **{module_name}.{member_name}**"
 
         if self._is_internal_fn(full_word):

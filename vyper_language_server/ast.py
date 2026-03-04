@@ -6,7 +6,7 @@ from pygls.workspace import Document
 from vyper.ast import VyperNode, nodes
 from vyper.compiler import CompilerData
 from vyper.compiler.input_bundle import FilesystemInputBundle
-from vyper.compiler.phases import DEFAULT_CONTRACT_PATH, ModuleT
+from vyper.compiler.phases import DEFAULT_CONTRACT_PATH
 from vyper.semantics.types import StructT
 from vyper.semantics.types.user import FlagT
 from vyper.exceptions import VyperException
@@ -62,10 +62,15 @@ class AST:
             if import_info:
                 alias = import_info.alias
                 # Handle module imports (vyper files)
-                if hasattr(import_info, "parsed") and isinstance(import_info.parsed, nodes.Module):
+                if hasattr(import_info, "parsed") and isinstance(
+                    import_info.parsed, nodes.Module
+                ):
                     # Get the module type from the parsed AST
                     parsed_module = import_info.parsed
-                    if hasattr(parsed_module, "_metadata") and "type" in parsed_module._metadata:
+                    if (
+                        hasattr(parsed_module, "_metadata")
+                        and "type" in parsed_module._metadata
+                    ):
                         imports[alias] = parsed_module._metadata["type"]
                 # Handle interface imports (json/vyi files)
                 elif hasattr(import_info, "parsed"):
