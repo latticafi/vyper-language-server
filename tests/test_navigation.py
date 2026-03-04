@@ -1,8 +1,8 @@
 from lsprotocol.types import Position
 from pygls.workspace import Document
 
-from vyper_lsp.ast import AST
-from vyper_lsp.navigation import ASTNavigator
+from vyper_language_server.ast import AST
+from vyper_language_server.navigation import ASTNavigator
 
 import pytest
 

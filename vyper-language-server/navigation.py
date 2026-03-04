@@ -5,8 +5,8 @@ from typing import List, Optional
 
 from pygls.workspace import Document
 from vyper.ast import FlagDef, FunctionDef, VyperNode
-from vyper_lsp.ast import AST
-from vyper_lsp.utils import (
+from vyper_language_server.ast import AST
+from vyper_language_server.utils import (
     get_expression_at_cursor,
     get_word_at_cursor,
     range_from_node,
@@ -14,7 +14,7 @@ from vyper_lsp.utils import (
 
 ENUM_VARIANT_PATTERN = re.compile(r"([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z_][a-zA-Z0-9_]*)")
 
-logger = logging.getLogger("vyper-lsp")
+logger = logging.getLogger("vyper-language-server")
 
 
 # this class should abstract away all the AST stuff

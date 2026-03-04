@@ -1,4 +1,4 @@
-from vyper_lsp import utils
+from vyper_language_server import utils
 
 
 def test_get_word_at_cursor():

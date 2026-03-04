@@ -1,5 +1,5 @@
 import time
-from vyper_lsp.debounce import Debouncer  # Import Debouncer from your module
+from vyper_language_server.debounce import Debouncer  # Import Debouncer from your module
 
 
 def test_debounce():

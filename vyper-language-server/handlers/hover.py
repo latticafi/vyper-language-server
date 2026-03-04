@@ -7,8 +7,8 @@ from lsprotocol.types import (
 )
 from pygls.workspace import Document
 from vyper.ast import nodes
-from vyper_lsp.ast import AST
-from vyper_lsp.utils import (
+from vyper_language_server.ast import AST
+from vyper_language_server.utils import (
     get_expression_at_cursor,
     get_word_at_cursor,
 )
@@ -18,7 +18,7 @@ deprecation_pattern = re.compile(pattern_text)
 
 min_vyper_version = Version("0.4.0")
 
-logger = logging.getLogger("vyper-lsp")
+logger = logging.getLogger("vyper-language-server")
 
 
 class HoverHandler:

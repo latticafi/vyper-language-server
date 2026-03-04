@@ -7,7 +7,7 @@ from lsprotocol.types import (
 )
 from pygls.workspace import Document
 
-from vyper_lsp.handlers.completion import CompletionHandler
+from vyper_language_server.handlers.completion import CompletionHandler
 
 
 def test_completion_internal_fn(ast):

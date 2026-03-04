@@ -1,8 +1,8 @@
 from lsprotocol.types import Position, SignatureHelpParams, TextDocumentIdentifier
 from pygls.workspace import Document
-from vyper_lsp.ast import AST
-from vyper_lsp.handlers.signatures import SignatureHandler
-from vyper_lsp.handlers.hover import HoverHandler
+from vyper_language_server.ast import AST
+from vyper_language_server.handlers.signatures import SignatureHandler
+from vyper_language_server.handlers.hover import HoverHandler
 
 
 def test_signature_help(ast: AST):

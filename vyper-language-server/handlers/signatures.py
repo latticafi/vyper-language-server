@@ -10,11 +10,11 @@ from lsprotocol.types import (
     SignatureHelpParams,
     SignatureInformation,
 )
-from vyper_lsp import utils
-from vyper_lsp.ast import AST
-from vyper_lsp.utils import get_expression_at_cursor
+from vyper_language_server import utils
+from vyper_language_server.ast import AST
+from vyper_language_server.utils import get_expression_at_cursor
 
-logger = logging.getLogger("vyper-lsp")
+logger = logging.getLogger("vyper-language-server")
 
 
 class SignatureHandler:

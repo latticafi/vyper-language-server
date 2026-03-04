@@ -8,10 +8,10 @@ from lsprotocol.types import (
 )
 from pygls.server import LanguageServer
 from pygls.workspace import Document
-from vyper_lsp.utils import (
+from vyper_language_server.utils import (
     format_fn,
 )
-from vyper_lsp.ast import AST
+from vyper_language_server.ast import AST
 
 # Available base types
 UNSIGNED_INTEGER_TYPES = {f"uint{8*(i)}" for i in range(32, 0, -1)}

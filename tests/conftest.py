@@ -4,7 +4,7 @@ from typing import Dict, Tuple
 from lsprotocol.types import Position, Range
 from pygls.workspace import Document
 
-from vyper_lsp.ast import AST
+from vyper_language_server.ast import AST
 
 
 @pytest.fixture

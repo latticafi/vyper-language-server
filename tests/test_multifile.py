@@ -1,9 +1,9 @@
 import pytest
 from pathlib import Path
-from vyper_lsp.ast import AST
+from vyper_language_server.ast import AST
 from pygls.workspace import Document
 from vyper.compiler.input_bundle import FilesystemInputBundle
-from vyper_lsp.handlers.completion import CompletionHandler
+from vyper_language_server.handlers.completion import CompletionHandler
 from vyper.ast import nodes
 
 

@@ -1,7 +1,7 @@
 from lsprotocol.types import Position
 from pygls.workspace import Document
 
-from vyper_lsp.ast import AST
+from vyper_language_server.ast import AST
 
 
 def test_document_fixture(vyper_document, struct_code):

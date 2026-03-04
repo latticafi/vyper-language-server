@@ -14,14 +14,14 @@ from vyper.cli.vyper_compile import get_search_paths
 import warnings
 import re
 
-from vyper_lsp.utils import (
+from vyper_language_server.utils import (
     create_diagnostic_warning,
     diagnostic_from_exception,
     working_directory_for_document,
     document_to_fileinput,
 )
 
-logger = logging.getLogger("vyper-lsp")
+logger = logging.getLogger("vyper-language-server")
 
 
 pattern_text = r"(.+) will be deprecated in a future release, use (.+) instead\."
