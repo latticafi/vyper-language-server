@@ -31,7 +31,7 @@ initializes: lib
 def increment():
     lib.increment_counter()
 
-@external  
+@external
 def get_counter() -> uint256:
     return lib.counter
 """
